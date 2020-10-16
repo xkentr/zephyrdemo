@@ -7,12 +7,12 @@
 #include <zephyr.h>
 #include <sys/printk.h>
 #include "accel.h"
+#include "odo.h"
 
 void my_work_handler(struct k_work *work)
 {
-    int16_t sample[3];
-	accel_get_sample(sample);
-	printk("Accel sample: (%d, %d, %d)\n", sample[0], sample[1], sample[2]);
+    float d = odo_get();
+	printf("Distance traveled: %f\n", d);
 }
 
 K_WORK_DEFINE(my_work, my_work_handler);
@@ -27,6 +27,7 @@ K_TIMER_DEFINE(my_timer, my_timer_handler, NULL);
 void main(void)
 {
 	accel_init(ACCEL_RANGE_8G, ACCEL_RATE_20HZ);
+	odo_init();
 	k_timer_start(&my_timer, K_SECONDS(1), K_SECONDS(1));
 	k_timer_status_sync(&my_timer);
 	while (1) {

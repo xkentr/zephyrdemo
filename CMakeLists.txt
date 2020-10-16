@@ -8,4 +8,5 @@ project(zephyrdemo)
 target_sources(app PRIVATE
     src/main.c
     src/accel_sim.c
+    src/odo.c
 )
